@@ -67,6 +67,27 @@ fn check_games(games: Vec<Vec<Vec<Draw>>>, totals: HashMap<Color, u32>) -> u32 {
     score
 }
 
+fn calculate_minimum(games: Vec<Vec<Vec<Draw>>>) -> u32 {
+    let mut sum = 0;
+    for game in games {
+        let mut max = HashMap::from([
+            (Color::Red, 0),
+            (Color::Green, 0),
+            (Color::Blue, 0)
+        ]);
+        for round in game {
+            for draw in round {
+                if max.get(&draw.0).unwrap() < &draw.1 {
+                    max.insert(draw.0, draw.1);
+                }
+            }
+        }
+        let power = max.values().fold(1, |acc, x| acc * x);
+        sum += power;
+    }
+    sum
+}
+
 pub fn run(part: u8, input: String) {
     let totals = HashMap::from([
         (Color::Red, 12),
@@ -78,6 +99,11 @@ pub fn run(part: u8, input: String) {
         1 => {
             let games = parse_input(&input).unwrap();
             let res = check_games(games, totals);
+            println!("{}", res);
+        }
+        2 => {
+            let games = parse_input(&input).unwrap();
+            let res = calculate_minimum(games);
             println!("{}", res);
         }
         _ => {
