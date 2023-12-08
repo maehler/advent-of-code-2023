@@ -4,6 +4,7 @@ mod utils;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -20,6 +21,7 @@ fn main() {
         1 => day1::run(args.part, args.input),
         2 => day2::run(args.part, args.input),
         3 => day3::run(args.part, args.input),
+        4 => day4::run(args.part, args.input),
         _ => println!("Day {} not implemented", args.day),
     }
 }
