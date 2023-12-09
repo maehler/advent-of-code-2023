@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections:: HashSet;
 
 use super::utils;
 
@@ -42,6 +42,12 @@ mod card_parser {
     }
 }
 
+fn get_n_winners(winners: Vec<u32>, numbers: Vec<u32>) -> usize {
+    let w: HashSet<u32> = HashSet::from_iter(winners);
+    let n: HashSet<u32> = HashSet::from_iter(numbers);
+    w.intersection(&n).count()
+}
+
 fn parse_cards(input: &str) -> Vec<u32> {
     let lines = utils::read_lines(input).unwrap();
 
@@ -49,9 +55,7 @@ fn parse_cards(input: &str) -> Vec<u32> {
 
     for line in lines {
         let (winners, numbers) = card_parser::parse(&line.unwrap());
-        let w: HashSet<u32> = HashSet::from_iter(winners);
-        let n: HashSet<u32> = HashSet::from_iter(numbers);
-        let n_winning = w.intersection(&n).count();
+        let n_winning = get_n_winners(winners, numbers);
         if n_winning == 0 {
             scores.push(0);
         } else {
@@ -62,12 +66,38 @@ fn parse_cards(input: &str) -> Vec<u32> {
     scores
 }
 
+fn parse_cards2(input: &str) -> usize {
+    let n_lines = utils::read_lines(input).unwrap().count();
+    let lines = utils::read_lines(input).unwrap();
+
+    let mut card_count: Vec<usize> = vec![0; n_lines];
+    for (i, line) in lines.enumerate() {
+        card_count[i] += 1;
+
+        let (winners, numbers) = card_parser::parse(&line.unwrap());
+        let n_winning = get_n_winners(winners, numbers);
+
+        for j in 1..=n_winning {
+            if i + j >= n_lines {
+                break;
+            }
+            card_count[i + j] += card_count[i];
+        }
+    }
+
+    return card_count.iter().sum();
+}
+
 pub fn run(part: u8, input: String) {
     match part {
         1 => {
             let scores = parse_cards(&input);    
             println!("{:?}", scores.iter().sum::<u32>());
         },
+        2 => {
+            let card_count = parse_cards2(&input);
+            println!("{:?}", card_count);
+        }
         _ => println!("part {} not implemented for day 4", part),
     }
 }
