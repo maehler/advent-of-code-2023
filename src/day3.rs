@@ -7,8 +7,7 @@ use super::utils;
 enum Content {
     Part(u32),
     Symbol,
-    Gear,
-    Empty
+    Gear
 }
 
 #[derive(Debug, Eq, PartialEq, Hash)]
@@ -37,7 +36,6 @@ impl Schematic {
         let mut parts = vec![];
         for (pos, x) in self.positions.iter() {
             match x {
-                Content::Empty => continue,
                 Content::Part(x) => {
                     //let num_length = x.ilog10() as usize + 1;
                     //let min_x = cmp::max(0, (pos.x as i32) - num_length as i32) as usize;

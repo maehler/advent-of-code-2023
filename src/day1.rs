@@ -77,6 +77,7 @@ pub fn run(part: u8, input: String) {
     }
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
 
